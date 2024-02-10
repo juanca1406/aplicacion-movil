@@ -1,0 +1,15 @@
+npm install @react-native-community/datetimepicker
+
+yarn add native-base react-native-svg@14.1.0 react-native-safe-area-context@4.8.2 @react-native-community/datetimepicker@7.6.1
+yarn add normalize-css-color
+yarn add @react-navigation/native
+
+expo install expo-media-library
+expo install expo-camera
+
+
+npm install @react-navigation/bottom-tabs
+@react-navigation/stack
+yarn add react-native-gesture-handler@2.14.0
+
+	
