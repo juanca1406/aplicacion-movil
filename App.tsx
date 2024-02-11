@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Tab1 from './Components/Tab1';
 import Tab2 from './Components/Tab2';
 import Camara from './Components/Camara';
+import Gallery from './Components/Gallery';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -14,6 +15,7 @@ function TabNavigator() {
     <Tab.Navigator>
       <Tab.Screen name="Registro" component={Tab1} />
       <Tab.Screen name="Información" component={Tab2} />
+      <Stack.Screen name="Gallery" component={Gallery} />
     </Tab.Navigator>
   );
 }
@@ -24,6 +26,7 @@ export default function App() {
       <Stack.Navigator>
         <Stack.Screen name="MainTabs" component={TabNavigator} options={{ headerShown: false }} />
         <Stack.Screen name="Camara" component={Camara} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
