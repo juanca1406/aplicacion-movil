@@ -1,31 +1,50 @@
-import React, { useState, useEffect } from 'react';
-import { Button, Image, View, Platform } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
+import React, { useState } from "react";
+import { ActivityIndicator, Button, FlatList, Image, Text, View, } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 
-export default function ImagePickerExample() {
-    const [image, setImage] = useState(null);
+export default function App() {
+    const [images, setImages] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const pickImage = async () => {
+    const pickImages = async () => {
+        setIsLoading(true);
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            //allowsEditing: true,
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsMultipleSelection: true,
             selectionLimit: 10,
             aspect: [4, 3],
             quality: 1,
         });
-
+        setIsLoading(false);
         console.log(result);
-
-        if (!result.canceled) {
-            setImage(result.assets[0].uri);
+        if (!result.cancelled && result.assets) {
+            setImages(prevImages => [...prevImages, ...result.assets.map(asset => asset.uri)]);
         }
     };
 
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Button title="Pick an image from camera roll" onPress={pickImage} />
-            {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-        </View>
+        <FlatList
+            data={images}
+            renderItem={({ item }) => (
+                <Image source={{ uri: item }} style={{ width: 200, height: 200 }} />
+            )}
+            numColumns={2}
+            keyExtractor={(item, index) => index.toString()} // Utilizamos el índice como clave única
+            contentContainerStyle={{ marginVertical: 1, paddingBottom: 100 }}
+            ListHeaderComponent={
+                isLoading ? (
+                    <View>
+                        <Text
+                            style={{ fontSize: 20, fontWeight: "bold", textAlign: "center" }}
+                        >
+                            Loading...
+                        </Text>
+                        <ActivityIndicator size={"large"} />
+                    </View>
+                ) : (
+                    <Button title="Seleccionar imagen" onPress={pickImages} />
+                )
+            }
+        />
     );
 }

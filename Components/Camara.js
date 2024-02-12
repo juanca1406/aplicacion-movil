@@ -3,8 +3,10 @@ import { Camera, CameraType } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import Button from './Button'
+import { useNavigation } from '@react-navigation/native';
 
 export default function Camara() {
+    const navigation = useNavigation();
 
     const [hasCameraPermission, setHasCameraPermission] = useState(null);
     const [image, setImage] = useState(null);
@@ -39,6 +41,7 @@ export default function Camara() {
                 alert('Imagen guardada! 🎉');
                 setImage(null);
                 console.log('Guardado exitosamente');
+                navigation.navigate('Registro');
             } catch (error) {
                 console.log(error);
             }
