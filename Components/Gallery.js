@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { ActivityIndicator, Button, FlatList, Image, Text, View, } from "react-native";
+import { ActivityIndicator, Button, FlatList, Text, View, Image } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 
-export default function App() {
+export default function Gallery() {
     const [images, setImages] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -28,9 +28,8 @@ export default function App() {
             renderItem={({ item }) => (
                 <Image source={{ uri: item }} style={{ width: 200, height: 200 }} />
             )}
-            numColumns={2}
-            keyExtractor={(item, index) => index.toString()} // Utilizamos el índice como clave única
-            contentContainerStyle={{ marginVertical: 1, paddingBottom: 100 }}
+            numColumns={1}
+            keyExtractor={(item, index) => index.toString()}
             ListHeaderComponent={
                 isLoading ? (
                     <View>

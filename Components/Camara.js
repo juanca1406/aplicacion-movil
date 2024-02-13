@@ -6,6 +6,7 @@ import Button from './Button'
 import { useNavigation } from '@react-navigation/native';
 
 export default function Camara() {
+    
     const navigation = useNavigation();
 
     const [hasCameraPermission, setHasCameraPermission] = useState(null);

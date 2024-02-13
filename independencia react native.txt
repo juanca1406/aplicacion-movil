@@ -12,4 +12,4 @@ npm install @react-navigation/bottom-tabs
 @react-navigation/stack
 yarn add react-native-gesture-handler@2.14.0
 
-	
+	  
