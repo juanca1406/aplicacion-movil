@@ -1,9 +1,19 @@
 import React, { useState, useContext } from "react";
-import { Platform, Button, StyleSheet, View, Text, TextInput, Image } from "react-native";
+import {
+  Platform,
+  Button,
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  Image,
+  FlatList,
+  Dimensions,
+} from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
 import Gallery from "./Gallery";
-import CameraContext from '../Context/CameraContext';
+import CameraContext from "../Context/CameraContext";
 
 export default function Tab1() {
   const [date, setDate] = useState(new Date());
@@ -29,37 +39,73 @@ export default function Tab1() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>{'\n'}Placa</Text>
-      <TextInput style={styles.input} placeholder="Ingrese La Placa" />
-      <Button title="Seleccionar fecha" onPress={showDatepicker} />
-      {showDatePicker && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={date}
-          mode="date"
-          is24Hour={true}
-          display="default"
-          onChange={onChange}
-        />
-      )}
-      <Text>{'\n'}</Text>
-      <Text style={styles.text}>Fecha seleccionada: {date.toLocaleDateString()}{'\n'}{'\n'}</Text>
-      <Text style={styles.text}>Inicio:{'\n'}</Text>
-      <View style={styles.gallery}>
-        <View style={styles.button}>
-          <Button title="Tomar foto" onPress={openCamera} />
+    <FlatList
+      data={[1]}
+      renderItem={({ item }) => (
+        <View style={styles.container}>
+          <Text style={styles.text}>{"\n"}Placa</Text>
+          <TextInput style={styles.input} placeholder="Ingrese La Placa" />
+          <View>
+            <Button title="Seleccionar fecha" onPress={showDatepicker} />
+          </View>
+          {showDatePicker && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={date}
+              mode="date"
+              is24Hour={true}
+              display="default"
+              onChange={onChange}
+            />
+          )}
+          <Text>{"\n"}</Text>
+          <Text style={styles.text}>
+            Fecha seleccionada: {date.toLocaleDateString()}
+            {"\n"}
+            {"\n"}
+          </Text>
+          <Text style={styles.text}>Inicio:</Text>
+
+          <View style={styles.gallery}>
+            <View style={styles.button}>
+              <Button title="Tomar foto" onPress={openCamera} />
+            </View>
+            <Gallery />
+            <View style={styles.img}>
+              {image && (
+                <Image
+                  source={{ uri: image }}
+                  style={{ width: 100, height: 100 }}
+                />
+              )}
+            </View>
+          </View>
+          <Text style={styles.text}>Arriba:</Text>
+
+          <View style={styles.gallery}>
+            <View style={styles.button}>
+              <Button title="Tomar foto" onPress={openCamera} />
+            </View>
+            <Gallery />
+            <View style={styles.img}>
+              {image && (
+                <Image
+                  source={{ uri: image }}
+                  style={{ width: 100, height: 100 }}
+                />
+              )}
+            </View>
+          </View>
         </View>
-        <Gallery />
-        {image && <Image source={{ uri: image }} style={{ width: 100, height: 100 }} />}
-      </View>
-    </View>
+      )}
+      keyExtractor={(item, index) => index.toString()}
+    />
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   input: {
     height: 40,
@@ -67,27 +113,30 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     width: 300,
-    fontStyle: 'italic',
+    fontStyle: "italic",
     fontSize: 16,
   },
   text: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     fontSize: 16,
-    fontStyle: 'italic',
+    fontStyle: "italic",
   },
   gallery: {
-    borderColor: 'gray',
+    borderColor: "gray",
     borderWidth: 1,
     height: 200,
-    width: '100%',
+    width: "100%",
     margin: 12,
-    display: 'flex',
-    justifyContent: 'space-between',
-    flexDirection: 'row',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   button: {
-    width: 200,
-    height: 100
-  }
+    height: 200,
+    width: 170,
+  },
+  img: {
+    position: "absolute",
+    paddingTop: 40,
+  },
 });
