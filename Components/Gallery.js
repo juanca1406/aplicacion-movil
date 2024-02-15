@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { ActivityIndicator, Button, FlatList, Text, View, Image } from "react-native";
+import { ActivityIndicator, FlatList, Text, View, Image, StyleSheet } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import Button from './Button'
 
 export default function Gallery() {
     const [images, setImages] = useState([]);
@@ -26,9 +27,9 @@ export default function Gallery() {
         <FlatList
             data={images}
             renderItem={({ item }) => (
-                <Image source={{ uri: item }} style={{ width: 200, height: 200 }} />
+                <Image source={{ uri: item }} style={{ width: 100, height: 100 }} />
             )}
-            numColumns={1}
+            numColumns={3}
             keyExtractor={(item, index) => index.toString()}
             ListHeaderComponent={
                 isLoading ? (
@@ -41,7 +42,9 @@ export default function Gallery() {
                         <ActivityIndicator size={"large"} />
                     </View>
                 ) : (
-                    <Button title="Seleccionar imagen" onPress={pickImages} />
+                    <View style={{ width: 200 }}>
+                        <Button title="Seleccionar imagen" onPress={pickImages} />
+                    </View>
                 )
             }
         />

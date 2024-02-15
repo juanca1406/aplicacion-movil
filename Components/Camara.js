@@ -1,16 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useContext } from 'react'; // Agrega useContext al import
 import { Camera, CameraType } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import { View, Text, StyleSheet, Image } from 'react-native';
-import Button from './Button'
+import Button from './Button';
 import { useNavigation } from '@react-navigation/native';
+import CameraContext from '../Context/CameraContext';
 
 export default function Camara() {
-    
     const navigation = useNavigation();
+    const { setImage } = useContext(CameraContext);
 
     const [hasCameraPermission, setHasCameraPermission] = useState(null);
-    const [image, setImage] = useState(null);
+    const [imageState, setImageState] = useState(null);
     const [type, setType] = useState(Camera.Constants.Type.back);
     const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
     const cameraRef = useRef(null);
@@ -28,6 +29,7 @@ export default function Camara() {
             try {
                 const data = await cameraRef.current.takePictureAsync();
                 console.log(data);
+                setImageState(data.uri);
                 setImage(data.uri);
             } catch (error) {
                 console.log(error);
@@ -36,11 +38,11 @@ export default function Camara() {
     };
 
     const savePicture = async () => {
-        if (image) {
+        if (imageState) {
             try {
-                const asset = await MediaLibrary.createAssetAsync(image);
+                const asset = await MediaLibrary.createAssetAsync(imageState);
                 alert('Imagen guardada! 🎉');
-                setImage(null);
+                setImageState(null);
                 console.log('Guardado exitosamente');
                 navigation.navigate('Registro');
             } catch (error) {
@@ -50,31 +52,33 @@ export default function Camara() {
     };
 
     if (hasCameraPermission === false) {
-        return <Text>No acceso a la camara</Text>
+        return <Text>No acceso a la camara</Text>;
     }
 
     return (
         <View style={styles.container}>
-            {!image ?
+            {!imageState ? (
                 <Camera
                     style={styles.camera}
                     type={type}
                     flashMode={flash}
                     ref={cameraRef}
                 >
-                    <View style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        paddingHorizontal: 30,
-                    }}>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            paddingHorizontal: 30,
+                        }}>
                         <Button
                             title=""
-                            icon="retweet"
+                            icon="flip-camera-ios"
                             onPress={() => {
                                 setType(type === CameraType.back ? CameraType.front : CameraType.back);
-                            }} />
+                            }}
+                        />
                         <Button
-                            icon="flash"
+                            icon="flash-on"
                             color={flash === Camera.Constants.FlashMode.off ? 'gray' : '#fff'}
                             onPress={() =>
                                 setFlash(
@@ -86,22 +90,23 @@ export default function Camara() {
                         />
                     </View>
                 </Camera>
-                :
-                <Image source={{ uri: image }} style={styles.camera} />
-            }
+            ) : (
+                <Image source={{ uri: imageState }} style={styles.camera} />
+            )}
             <View>
-                {image ?
-                    <View style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        paddingHorizontal: 50,
-                    }}>
-                        <Button title={'Re-take'} icon="retweet" onPress={() => setImage(null)} />
+                {imageState ? (
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            paddingHorizontal: 50,
+                        }}>
+                        <Button title={'Re-take'} icon="flip-camera-ios" onPress={() => setImageState(null)} />
                         <Button title={'Save'} icon="check" onPress={savePicture} />
                     </View>
-                    :
-                    <Button title={'Tomar foto'} icon="camera" onPress={takePicture} />
-                }
+                ) : (
+                    <Button icon="camera" onPress={takePicture} />
+                )}
             </View>
         </View>
     );
@@ -117,6 +122,5 @@ const styles = StyleSheet.create({
     camera: {
         flex: 1,
         borderRadius: 20,
-    }
-
-})
+    },
+});
