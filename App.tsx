@@ -1,11 +1,11 @@
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Tab2 from './Components/Tab2';
-import Camara from './Components/Camara';
-import Tab1 from './Components/Tab1';
-import { CameraProvider } from './Context/CameraContext';
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Tab2 from "./Components/Tab2";
+import Camara from "./Components/Camara";
+import Tab1 from "./Components/Tab1";
+import { CameraProvider } from "./Context/CameraContext";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -24,7 +24,11 @@ export default function App() {
     <CameraProvider>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="MainTabs" component={TabNavigator} options={{ headerShown: false }} />
+          <Stack.Screen
+            name="MainTabs"
+            component={TabNavigator}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen name="Camara" component={Camara} />
         </Stack.Navigator>
       </NavigationContainer>

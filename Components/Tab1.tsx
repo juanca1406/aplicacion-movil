@@ -18,9 +18,7 @@ import CameraContext from "../Context/CameraContext";
 export default function Tab1() {
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
-
   const { image } = useContext(CameraContext);
-
   const onChange = (event: any, selectedDate: Date | undefined) => {
     const currentDate = selectedDate || date;
     setShowDatePicker(Platform.OS === "ios");
@@ -67,34 +65,7 @@ export default function Tab1() {
           <Text style={styles.text}>Inicio:</Text>
 
           <View style={styles.gallery}>
-            <View style={styles.button}>
-              <Button title="Tomar foto" onPress={openCamera} />
-            </View>
             <Gallery />
-            <View style={styles.img}>
-              {image && (
-                <Image
-                  source={{ uri: image }}
-                  style={{ width: 100, height: 100 }}
-                />
-              )}
-            </View>
-          </View>
-          <Text style={styles.text}>Arriba:</Text>
-
-          <View style={styles.gallery}>
-            <View style={styles.button}>
-              <Button title="Tomar foto" onPress={openCamera} />
-            </View>
-            <Gallery />
-            <View style={styles.img}>
-              {image && (
-                <Image
-                  source={{ uri: image }}
-                  style={{ width: 100, height: 100 }}
-                />
-              )}
-            </View>
           </View>
         </View>
       )}
