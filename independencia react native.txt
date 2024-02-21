@@ -14,3 +14,6 @@ yarn add react-native-gesture-handler@2.14.0
 
 	  
 npm install react-native-gesture-handler
+
+
+{image && <Image source={{ uri: image }} style={{ width: 100, height: 100 }} />}

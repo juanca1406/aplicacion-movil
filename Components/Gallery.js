@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
+import CameraContext from '../Context/CameraContext';
 
 export default function Gallery() {
   const [images, setImages] = useState([]);
@@ -19,6 +20,7 @@ export default function Gallery() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
+  const { image } = useContext(CameraContext);
 
   const pickImages = async () => {
     setIsLoading(true);
@@ -34,13 +36,13 @@ export default function Gallery() {
     if (!result.cancelled && result.assets) {
       setImages((prevImages) => [
         ...prevImages,
-        ...result.assets.map((asset) => asset.uri),
+        ...result.assets.map((asset, index) => ({ uri: asset.uri, id: index })),
       ]);
     }
   };
 
-  const handleImagePress = (uri) => {
-    setSelectedImage(uri);
+  const handleImagePress = (item) => {
+    setSelectedImage(item);
     setModalVisible(true);
   };
 
@@ -51,19 +53,19 @@ export default function Gallery() {
   return (
     <View style={styles.container}>
       <FlatList
-        data={images}
+        data={[{ uri: image, id: "cameraImage" }, ...images]}
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => handleImagePress(item)}>
             <View style={styles.img}>
               <Image
-                source={{ uri: item }}
+                source={{ uri: item.uri }}
                 style={{ width: 100, height: 100 }}
               />
             </View>
           </TouchableOpacity>
         )}
-        numColumns={2}
-        keyExtractor={(item, index) => index.toString()}
+        numColumns={3}
+        keyExtractor={(item) => item.id.toString()}
         ListHeaderComponent={
           isLoading ? (
             <View>
@@ -79,9 +81,13 @@ export default function Gallery() {
               <ActivityIndicator size={"large"} />
             </View>
           ) : (
-            <View style={styles.button}>
-              <Button title="Seleccionar imagen" onPress={pickImages} />
-              <Button title="Tomar foto" onPress={openCamera} />
+            <View style={styles.button} >
+              <View style={styles.buttonSeleccionar}>
+                <Button title="Seleccionar imagen" onPress={pickImages} />
+              </View>
+              <View style={styles.buttonCamera}>
+                <Button title="Tomar foto" onPress={openCamera} />
+              </View>
             </View>
           )
         }
@@ -96,7 +102,7 @@ export default function Gallery() {
         <View style={styles.modalContainer}>
           <View style={styles.modalImageContainer}>
             <Image
-              source={{ uri: selectedImage }}
+              source={{ uri: selectedImage ? selectedImage.uri : null }}
               style={{ width: "100%", height: "100%" }}
               resizeMode="contain"
             />
@@ -116,9 +122,19 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   button: {
-    display: "flex",
+    display: 'flex',
     flexDirection: "row",
     justifyContent: "space-between",
+    margin: 12,
+    height: 40,
+    borderColor: 'black',
+    borderBottomWidth: 1,
+  },
+  buttonSeleccionar: {
+    marginRight: 12,
+  },
+  buttonCamera: {
+    marginLeft: 12,
   },
   modalContainer: {
     flex: 1,

@@ -44,7 +44,7 @@ export default function Camara() {
         alert("Imagen guardada! 🎉");
         setImageState(null);
         console.log("Guardado exitosamente");
-        navigation.navigate("Registro");
+        navigation.goBack();
       } catch (error) {
         console.log(error);
       }
